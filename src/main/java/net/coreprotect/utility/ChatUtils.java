@@ -1,5 +1,6 @@
 package net.coreprotect.utility;
 
+import net.coreprotect.config.Config;
 import net.coreprotect.language.Phrase;
 import net.coreprotect.language.Selector;
 import org.bukkit.command.ConsoleCommandSender;
@@ -34,7 +35,14 @@ public class ChatUtils {
     private static String getCoordinateComponent(String command, int worldId, int x, int y, int z, String display) {
         StringBuilder message = new StringBuilder(Chat.COMPONENT_TAG_OPEN + Chat.COMPONENT_COMMAND);
         DecimalFormat decimalFormat = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ROOT));
-        message.append("|/" + command + " teleport wid:" + worldId + " " + decimalFormat.format(x + 0.50) + " " + y + " " + decimalFormat.format(z + 0.50) + "|");
+        String teleportCommand = Config.getGlobal().TELEPORT_COMMAND;
+        if (teleportCommand.isEmpty()) {
+            message.append("|/" + command + " teleport wid:" + worldId + " " + decimalFormat.format(x + 0.50) + " " + y + " " + decimalFormat.format(z + 0.50) + "|");
+        }
+        else {
+            teleportCommand = teleportCommand.replace("{world}", WorldUtils.getWorldName(worldId)).replace("{x}", decimalFormat.format(x + 0.50)).replace("{y}", Integer.toString(y)).replace("{z}", decimalFormat.format(z + 0.50));
+            message.append("|/" + teleportCommand + "|");
+        }
         message.append(display);
 
         return message.append(Chat.COMPONENT_TAG_CLOSE).toString();
