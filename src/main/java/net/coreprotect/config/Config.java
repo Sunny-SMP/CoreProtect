@@ -56,6 +56,7 @@ public class Config extends Language {
     public String LANGUAGE;
     public String AUTO_PURGE;
     public String AUTO_PURGE_TIME;
+    public String TELEPORT_COMMAND;
     public boolean ENABLE_SSL;
     public boolean CLICKHOUSE_TLS;
     public boolean DISABLE_WAL;
@@ -143,6 +144,7 @@ public class Config extends Language {
         DEFAULT_VALUES.put("verbose", "true");
         DEFAULT_VALUES.put("default-radius", "10");
         DEFAULT_VALUES.put("max-radius", "100");
+        DEFAULT_VALUES.put("teleport-command", "");
         DEFAULT_VALUES.put("rollback-items", "true");
         DEFAULT_VALUES.put("rollback-entities", "true");
         DEFAULT_VALUES.put("skip-generic-data", "true");
@@ -194,6 +196,7 @@ public class Config extends Language {
         HEADERS.put("verbose", new String[] { "# If enabled, extra data is displayed during rollbacks and restores.", "# Can be manually triggered by adding \"#verbose\" to your rollback command." });
         HEADERS.put("default-radius", new String[] { "# If no radius is specified in a rollback or restore, this value will be", "# used as the radius. Set to \"0\" to disable automatically adding a radius." });
         HEADERS.put("max-radius", new String[] { "# The maximum radius that can be used in a command. Set to \"0\" to disable.", "# To run a rollback or restore without a radius, you can use \"r:#global\"." });
+        HEADERS.put("teleport-command", new String[] { "# Command run when clicking coordinates in lookup results. Leave empty to use \"/co teleport\".", "# Placeholders: {world}, {x}, {y}, {z}. Example: \"tppos {x} {y} {z} {world}\"" });
         HEADERS.put("rollback-items", new String[] { "# If enabled, items taken from containers (etc) will be included in rollbacks." });
         HEADERS.put("rollback-entities", new String[] { "# If enabled, entity kills and player-attributed entity spawns will be included in rollbacks." });
         HEADERS.put("skip-generic-data", new String[] { "# If enabled, generic data, like zombies burning in daylight, won't be logged." });
@@ -269,6 +272,7 @@ public class Config extends Language {
         this.LANGUAGE = this.getString("language");
         this.AUTO_PURGE = this.getString("auto-purge");
         this.AUTO_PURGE_TIME = this.getString("auto-purge-time");
+        this.TELEPORT_COMMAND = this.getString("teleport-command").trim().replaceFirst("^/", "");
         this.CHECK_UPDATES = this.getBoolean("check-updates");
         this.ERROR_REPORTING = this.getBoolean("error-reporting");
         this.API_ENABLED = this.getBoolean("api-enabled");
