@@ -97,8 +97,12 @@ public class ActionParser {
                     else if (argument.equals("click") || argument.equals("clicks") || argument.equals("interact") || argument.equals("interaction") || argument.equals("player-interact") || argument.equals("player-interaction") || argument.equals("player-click")) {
                         result.add(LookupActions.INTERACTION);
                     }
-                    else if (argument.equals("death") || argument.equals("deaths") || argument.equals("entity-death") || argument.equals("entity-deaths") || argument.equals("kill") || argument.equals("kills") || argument.equals("entity-kill") || argument.equals("entity-kills")) {
+                    else if (argument.equals("kill") || argument.equals("kills") || argument.equals("entity-kill") || argument.equals("entity-kills")) {
                         result.add(LookupActions.ENTITY_KILL);
+                    }
+                    else if (argument.equals("death") || argument.equals("deaths") || argument.equals("entity-death") || argument.equals("entity-deaths")) {
+                        result.add(LookupActions.ENTITY_KILL);
+                        result.add(LookupActions.DEATH);
                     }
                     else if (argument.equals("spawn") || argument.equals("spawns") || argument.equals("entity-spawn") || argument.equals("entity-spawns")) {
                         result.add(LookupActions.ENTITY_SPAWN);

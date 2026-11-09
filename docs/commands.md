@@ -227,6 +227,7 @@ ___
 | `a:+item` | items picked up or withdrawn by players |
 | `a:-item` | items dropped, thrown, or deposited by players |
 | `a:kill` | mobs/animals killed |
+| `a:death` | times a player died (`u:` matches the player who died) |
 | `a:spawn` | entities placed or spawned by players |
 | `a:session` | player logins/logouts |
 | `a:+session` | player logins |
@@ -288,6 +289,17 @@ Add a hashtag to the end of your command to perform additional actions.
 | `#verbose` | Display additional information during a rollback/restore |
 | `#silent` | Display minimal information during a rollback/restore |
 
+#### `#players`
+
+*Only include actions done by players. Works with lookup, rollback, and restore.*
+
+* Example: `/co lookup r:20 t:1d #players` *(lookup what players did nearby, skipping hoppers, dispensers, TNT, and fire)*
+* Example: `/co rollback t:1h r:30 #players` *(rollback what players did in the last hour, leaving hopper and dispenser activity alone)*
+
+> `#playeronly` is an alias of `#players`. Using `e:#*` gives the same result and can be combined with other excluded users, such as `e:#*,Notch`.
+>
+> A user counts as a player when CoreProtect has a UUID stored for it. Non-player users like `#hopper`, `#tnt`, `#fire`, and names logged by other plugins through the API have no UUID, so they are excluded. Very old player records that never got a UUID (players who haven't joined since UUIDs were added) are excluded too.
+
 ___
 
 ## Example Commands
@@ -316,6 +328,8 @@ By default, if no radius is specified, a radius of 10 will be applied, restricti
   *(rollback inventory transactions by Notch in the last 5 minutes)*
 * `/co rollback t:15m r:30`  
   *(rollback everything done in the last 15 minutes by anyone within 30 blocks of you)*
+* `/co rollback t:15m r:30 #players`  
+  *(rollback everything PLAYERS did in the last 15 minutes within 30 blocks of you, leaving hoppers, dispensers, and other non-player activity alone)*
 * `/co rollback t:15m r:#worldedit`  
   *(rollback everything done in the last 15 minutes in a WorldEdit selection)*
 

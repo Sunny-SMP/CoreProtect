@@ -74,6 +74,11 @@ public class LookupCommand {
             return;
         }
 
+        if (LookupActions.hasIncompatibleDeathAction(argAction)) {
+            Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.INCOMPATIBLE_ACTION, "a:death"));
+            return;
+        }
+
         if (rollbackStateResult.isConflicting()) {
             Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.INVALID_PARAMETER, "#rolledback + #restored"));
             return;
