@@ -253,6 +253,8 @@ ___
 *Can be used to exclude a block/item/entity/user.*
 
 * Example: `e:tnt` *(exclude TNT)*
+* Example: `e:#hopper` *(exclude hopper transactions)*
+* Example: `e:#*` *(exclude all non-player users, same as `#players`)*
 
 ---
 
@@ -282,6 +284,7 @@ Add a hashtag to the end of your command to perform additional actions.
 | `#preview` | Preview a rollback/restore |
 | `#count` | Return the number of rows found in a lookup query |
 | `#summary` | Return the row count and per-user material totals |
+| `#players` | Only include actions done by players, excluding non-player users such as `#hopper` or `#tnt` (alias `#playeronly`) |
 | `#verbose` | Display additional information during a rollback/restore |
 | `#silent` | Display minimal information during a rollback/restore |
 
@@ -336,5 +339,7 @@ Lookup commands are generally the same as rollback commands. The primary differe
   *(lookup previous usernames used by Notch)*
 * `/co lookup r:50 t:7d a:block #summary`
   *(show the matching row count and material totals for each user within the same area and time range)*
+* `/co lookup r:20 t:1d #players`
+  *(lookup actions done by players within 20 blocks in the last day, skipping hoppers, dispensers, TNT, and other non-player users)*
 
 ___

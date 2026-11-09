@@ -2,6 +2,7 @@ package net.coreprotect.command.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 
@@ -115,6 +116,28 @@ public class UserParser {
         return excluded;
     }
 
+    /**
+     * Check whether the #players hashtag (alias #playeronly) is present.
+     * It restricts results to actions done by players.
+     *
+     * @param inputArguments
+     *            The command arguments
+     * @return true if non-player users should be excluded
+     */
+    public static boolean parsePlayersOnly(String[] inputArguments) {
+        for (int index = 1; index < inputArguments.length; index++) {
+            if (isPlayersOnlyModifier(inputArguments[index])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPlayersOnlyModifier(String argument) {
+        String normalized = argument.trim().toLowerCase(Locale.ROOT).replace("\\", "").replace("'", "");
+        return normalized.equals("#players") || normalized.equals("#playeronly");
+    }
+
     private static void addExcludedUserIfNotMaterial(List<String> excluded, String token) {
         String candidate = token.trim();
         if (!candidate.isEmpty() && !MaterialParser.isBlockOrEntity(candidate)) {
@@ -131,7 +154,7 @@ public class UserParser {
             users.add("#global");
             return;
         }
-        boolean isModifier = ActionParser.isModifier(user) || RollbackStateParser.isModifier(user);
+        boolean isModifier = ActionParser.isModifier(user) || RollbackStateParser.isModifier(user) || isPlayersOnlyModifier(user);
         if (isModifier && (!explicitPrefix || user.startsWith("#"))) {
             return;
         }

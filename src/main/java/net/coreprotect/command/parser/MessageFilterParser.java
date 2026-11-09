@@ -108,7 +108,7 @@ public final class MessageFilterParser {
                 || normalized.equals("n") || normalized.equals("noisy") || normalized.equals("v") || normalized.equals("verbose")
                 || normalized.equals("#v") || normalized.equals("#verbose") || normalized.equals("#silent")
                 || normalized.equals("#container") || normalized.equals("#preview") || normalized.equals("#preview_cancel") || normalized.equals("#preview-cancel")
-                || RollbackStateParser.isModifier(normalized);
+                || RollbackStateParser.isModifier(normalized) || UserParser.isPlayersOnlyModifier(normalized);
     }
 
     private static String normalize(String raw) {
