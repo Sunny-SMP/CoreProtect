@@ -920,7 +920,13 @@ public class LookupRaw extends Queue {
             }
 
             if (users.length() > 0) {
-                queryBlock = queryBlock + " " + userColumn + " IN(" + users + ") AND";
+                if (actionList.contains(LookupActions.DEATH)) {
+                    // a:death matches the player who died. Player kills store the victim's user ID in data, with type 0.
+                    queryBlock = queryBlock + " type = 0 AND data IN(" + users + ") AND";
+                }
+                else {
+                    queryBlock = queryBlock + " " + userColumn + " IN(" + users + ") AND";
+                }
             }
 
             if (excludeUsers.length() > 0) {

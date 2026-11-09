@@ -15,6 +15,11 @@ public final class LookupActions {
     public static final int SIGN = 10;
     public static final int ITEM = 11;
     public static final int ENTITY_SPAWN = 13;
+    /**
+     * Lookup-only marker sent with {@link #ENTITY_KILL} for a:death. It matches u: against the
+     * player who died instead of the killer. It is never stored in the database.
+     */
+    public static final int DEATH = 999;
 
     private LookupActions() {
         throw new IllegalStateException("Model class");
@@ -46,9 +51,26 @@ public final class LookupActions {
                 return "item";
             case ENTITY_SPAWN:
                 return "spawn";
+            case DEATH:
+                return "death";
             default:
                 return "unknown";
         }
+    }
+
+    /**
+     * a:death can only be combined with a:kill, since it changes which column u: is matched against.
+     */
+    public static boolean hasIncompatibleDeathAction(Collection<Integer> actions) {
+        if (!actions.contains(DEATH)) {
+            return false;
+        }
+        for (Integer action : actions) {
+            if (action != ENTITY_KILL && action != DEATH) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isInventoryLookup(Collection<Integer> actions) {
