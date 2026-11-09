@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import net.coreprotect.command.parser.RollbackStateParser;
+import net.coreprotect.command.parser.UserParser;
 import net.coreprotect.config.ConfigHandler;
 
 public class TabHandler implements TabCompleter {
@@ -159,6 +160,7 @@ public class TabHandler implements TabCompleter {
         boolean hasSummary;
         boolean hasRollbackState;
         boolean hasPreview;
+        boolean hasPlayersOnly;
         boolean hasPage;
         boolean validContainer;
         boolean pageLookup;
@@ -188,6 +190,9 @@ public class TabHandler implements TabCompleter {
             }
             else if (arg.equals("#preview")) {
                 state.hasPreview = true;
+            }
+            else if (UserParser.isPlayersOnlyModifier(arg)) {
+                state.hasPlayersOnly = true;
             }
             else if (arg.startsWith("f:") || arg.startsWith("filter:")) {
                 state.hasFilter = true;
@@ -522,6 +527,9 @@ public class TabHandler implements TabCompleter {
             }
             if (!state.hasPreview) {
                 params.add("#preview");
+            }
+            if (!state.hasPlayersOnly) {
+                params.add("#players");
             }
         }
 

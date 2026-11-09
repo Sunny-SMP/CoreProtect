@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import net.coreprotect.config.ConfigHandler;
@@ -273,6 +275,33 @@ public class UserStatement {
             }
         }
         return ConfigHandler.uuidCache.get(lowerUser);
+    }
+
+    /**
+     * Find the IDs of every non-player user (#hopper, #tnt, names logged through the API, ...).
+     * A user is a non-player when it has no UUID.
+     *
+     * @param connection
+     *            The database connection
+     * @return The IDs of all non-player users
+     */
+    public static List<Integer> findNonPlayerIds(Connection connection) throws SQLException {
+        String query;
+        if (ConfigHandler.databaseType.isClickHouse()) {
+            // ClickHouse stores a missing UUID as '' and can hold several rows per user until they are merged.
+            query = "SELECT rowid FROM " + ConfigHandler.prefix + "user GROUP BY rowid HAVING max(ifNull(uuid, '') != '') = 0";
+        }
+        else {
+            query = "SELECT rowid FROM " + ConfigHandler.prefix + "user WHERE uuid IS NULL OR uuid = ''";
+        }
+
+        List<Integer> ids = new ArrayList<>();
+        try (Statement statement = connection.createStatement(); ResultSet results = statement.executeQuery(query)) {
+            while (results.next()) {
+                ids.add(results.getInt(1));
+            }
+        }
+        return ids;
     }
 
     public static void clearClickHouseCaches() {

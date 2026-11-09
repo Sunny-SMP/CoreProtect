@@ -54,7 +54,7 @@ public class LookupCommand {
         EntityActionFilter argEntityActionFilter = actionResult.getEntityActionFilter();
         List<Object> argBlocks = CommandParser.parseRestricted(player, args, argAction);
         Map<Object, Boolean> argExclude = CommandParser.parseExcluded(player, args, argAction);
-        List<String> argExcludeUsers = CommandParser.parseExcludedUsers(player, args);
+        List<String> argExcludeUsers = CommandParser.parseExcludedUsersWithPlayersOnly(player, args);
         String ts = CommandParser.parseTimeString(args);
         long[] argTime = CommandParser.parseTime(args);
         long startTime = argTime[0];

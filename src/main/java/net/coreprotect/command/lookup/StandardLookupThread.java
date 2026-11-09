@@ -47,6 +47,7 @@ import net.coreprotect.model.lookup.LookupPage;
 import net.coreprotect.model.lookup.LookupRollbackState;
 import net.coreprotect.model.lookup.LookupSummaryPage;
 import net.coreprotect.model.lookup.LookupSummaryRow;
+import net.coreprotect.model.lookup.NonPlayerUsers;
 import net.coreprotect.utility.Chat;
 import net.coreprotect.utility.ChatUtils;
 import net.coreprotect.utility.Color;
@@ -191,7 +192,7 @@ public class StandardLookupThread implements Runnable {
                 }
                 if (exists) {
                     for (String check : excludedUsers) {
-                        if (!check.equals("#global") && !check.equals("#hopper")) {
+                        if (!check.equals("#global") && !check.equals("#hopper") && !NonPlayerUsers.isToken(check)) {
                             exists = PlayerLookup.playerExists(connection, check);
                             if (!exists) {
                                 baduser = check;

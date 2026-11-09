@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.coreprotect.command.parser.*;
+import net.coreprotect.model.lookup.NonPlayerUsers;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -110,6 +111,23 @@ public class CommandParser {
      */
     protected static List<String> parseExcludedUsers(CommandSender player, String[] inputArguments) {
         return UserParser.parseExcludedUsers(player, inputArguments);
+    }
+
+    /**
+     * Parse excluded users and apply the #players hashtag, which excludes every non-player user.
+     *
+     * @param player
+     *            The command sender
+     * @param inputArguments
+     *            The command arguments
+     * @return A list of excluded users
+     */
+    protected static List<String> parseExcludedUsersWithPlayersOnly(CommandSender player, String[] inputArguments) {
+        List<String> excluded = UserParser.parseExcludedUsers(player, inputArguments);
+        if (UserParser.parsePlayersOnly(inputArguments) && !excluded.contains(NonPlayerUsers.TOKEN)) {
+            excluded.add(NonPlayerUsers.TOKEN);
+        }
+        return excluded;
     }
 
     /**

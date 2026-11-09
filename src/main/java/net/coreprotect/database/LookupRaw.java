@@ -39,6 +39,7 @@ import net.coreprotect.model.item.ItemTransactionActions;
 import net.coreprotect.model.lookup.EntityLookupContext;
 import net.coreprotect.model.lookup.LookupCursor;
 import net.coreprotect.model.lookup.LookupRollbackState;
+import net.coreprotect.model.lookup.NonPlayerUsers;
 import net.coreprotect.model.rollback.SignRollbackChange;
 import net.coreprotect.utility.EntitySpawnTracking;
 import net.coreprotect.utility.EntityUtils;
@@ -698,6 +699,16 @@ public class LookupRaw extends Queue {
                 StringBuilder excludeUserText = new StringBuilder();
 
                 for (String excludeTarget : excludeUserList) {
+                    if (NonPlayerUsers.isToken(excludeTarget)) {
+                        for (int userId : UserStatement.findNonPlayerIds(statement.getConnection())) {
+                            if (excludeUserText.length() > 0) {
+                                excludeUserText.append(",");
+                            }
+                            excludeUserText.append(userId);
+                        }
+                        continue;
+                    }
+
                     int userId = UserStatement.findId(statement.getConnection(), excludeTarget);
                     if (userId < 0) {
                         continue;

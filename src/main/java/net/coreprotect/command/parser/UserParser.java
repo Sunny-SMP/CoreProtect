@@ -138,6 +138,28 @@ public class UserParser {
     }
 
     /**
+     * Check whether the #players hashtag (alias #playeronly) is present.
+     * It restricts results to actions done by players.
+     *
+     * @param inputArguments
+     *            The command arguments
+     * @return true if non-player users should be excluded
+     */
+    public static boolean parsePlayersOnly(String[] inputArguments) {
+        for (int index = 1; index < inputArguments.length; index++) {
+            if (isPlayersOnlyModifier(inputArguments[index])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPlayersOnlyModifier(String argument) {
+        String normalized = argument.trim().toLowerCase(Locale.ROOT).replace("\\", "").replace("'", "");
+        return normalized.equals("#players") || normalized.equals("#playeronly");
+    }
+
+    /**
      * Process a user string and add it to the users list if valid
      * 
      * @param users
@@ -146,7 +168,7 @@ public class UserParser {
      *            The user string to process
      */
     private static void parseUser(List<String> users, String user) {
-        List<String> badUsers = Arrays.asList("n", "noisy", "v", "verbose", "#v", "#verbose", "#silent", "#preview", "#preview_cancel", "#count", "#sum", "#summary", "#rolledback", "#rollbacked", "#restored");
+        List<String> badUsers = Arrays.asList("n", "noisy", "v", "verbose", "#v", "#verbose", "#silent", "#preview", "#preview_cancel", "#count", "#sum", "#summary", "#rolledback", "#rollbacked", "#restored", "#players", "#playeronly");
         String check = user.replaceAll("[\\s'\"]", "");
         if (check.equals(user) && check.length() > 0) {
             if (user.equalsIgnoreCase("#global")) {
